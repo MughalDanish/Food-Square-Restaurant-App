@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../FoodCartDesign.dart';
+
 class HomeFoodPage extends StatefulWidget {
   const HomeFoodPage({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class _HomeFoodPageState extends State<HomeFoodPage> {
       length: 5, // Number of tabs
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0XFFF5F5F5),
           leading: IconButton(
             icon: Image(image: AssetImage('assets/images/menuType2.png'), height: 25, width: 20),
             onPressed: () {},
@@ -88,7 +90,7 @@ class _HomeFoodPageState extends State<HomeFoodPage> {
             Expanded(
               child: TabBarView(
                 children: [
-                  Center(child: Text('Food Content')),
+                  FoodCartPage(),
                   Center(child: Text('Drinks Content')),
                   Center(child: Text('Snacks Content')),
                   Center(child: Text('Pizza Content')),
