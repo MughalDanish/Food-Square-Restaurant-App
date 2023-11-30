@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:food_square_restaurant_app/pages/Admin/Manage%20Products%20Board/display_and_create_products.dart';
 import 'package:http/http.dart' as http;
 import '../../../config.dart';
+import '../../FoodPages/checkout_food_carts.dart';
 import '../DashBoard Content/admin_panel.dart';
 
+// statefulWidget to manage customer order status
 class manageOrder extends StatefulWidget {
   const manageOrder({super.key});
 
   @override
   State<manageOrder> createState() => _manageOrderState();
 }
+
 
 class _manageOrderState extends State<manageOrder> {
   final searchTextController = TextEditingController();
@@ -171,6 +174,8 @@ class _manageOrderState extends State<manageOrder> {
 
 
 
+//Design of Customer Order Cart
+
 class OrderCartDesign extends StatefulWidget {
   final CustomerOrder object;
   const OrderCartDesign({super.key, required this.object});
@@ -239,7 +244,6 @@ class _OrderCartDesignState extends State<OrderCartDesign> {
                     );
                   }).toList(),
                 ),
-
                 SizedBox(width: 100),
                 Text(
                   widget.object.CustomerName.toString(),
@@ -301,6 +305,7 @@ class _OrderCartDesignState extends State<OrderCartDesign> {
   }
 }
 
+// get Second half of String
 String getStringID(String originalString) {
   // Calculate the midpoint index
   int midpointIndex = originalString.length ~/ 2;
@@ -364,7 +369,7 @@ class _GridOfOrdersState extends State<GridOfOrders> {
   }
 }
 
-
+// class of Customer Order
 class CustomerOrder {
   final String OrderId;
   final String CustomerName;
@@ -374,7 +379,7 @@ class CustomerOrder {
   CustomerOrder({required this.OrderId,required this.CustomerName, required this.CustomerPhoneNo, required this.OrderStatus, required this.totalBill});
 }
 
-
+// get API for getting Orders from database
 Future<List<CustomerOrder>> getOrderCartItem() async {
   List<CustomerOrder> orderItem = [];
   var response = await http.get(Uri.parse(getOrders));
@@ -401,7 +406,7 @@ Future<List<CustomerOrder>> getOrderCartItem() async {
 }
 
 
-
+// update APi for updating Order in database
 Future<void> UpdateOrderItemData(CustomerOrder object) async {
   var orderItemBody = {
     "customer_name": object.CustomerName,
@@ -426,3 +431,203 @@ Future<void> UpdateOrderItemData(CustomerOrder object) async {
     messageToShow('Server Error! Please try again later');
   }
 }
+
+
+//Issue Face in below code
+
+class viewOrders extends StatelessWidget {
+  const viewOrders({super.key, required this.object});
+  final order_Cart object;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        height: 400,
+        width: 700,
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 140,
+              width: 200,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.memory(
+                  object.image,
+                  height: 140,
+                  width: 200,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(width: 5),
+            Column(
+              children: [
+                Text(object.order_item_name,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Inter',
+                    color: Colors.black,
+                  ),),
+                SizedBox(height: 5),
+                Text('Rs, ' + object.price.toString(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Inter',
+                    color: Colors.black,
+                  ),),
+                SizedBox(height: 5),
+                Text('quatity , ' + object.quantity.toString(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Inter',
+                    color: Colors.black,
+                  ),),
+              ],
+            ),
+            Divider()
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class viewOrderData extends StatefulWidget {
+  const viewOrderData({super.key});
+
+  @override
+  State<viewOrderData> createState() => _viewOrderDataState();
+}
+
+class _viewOrderDataState extends State<viewOrderData> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+
+
+List<customerOrderDetail> customer_order = [];
+//
+// class viewOrderGrid extends StatefulWidget {
+//   const viewOrderGrid({super.key, required this.orderId, required this.object});
+//   final String orderId;
+//   final customerOrderDetail object;
+//
+//   @override
+//   State<viewOrderGrid> createState() => _viewOrderGridState();
+// }
+//
+// class _viewOrderGridState extends State<viewOrderGrid> {
+//   late Future<List<customerOrderDetail>> previousOrders;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     previousOrders = getCustomerOrderDetail(widget.orderId);
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: FutureBuilder<List<customerOrderDetail>>(
+//         future: previousOrders,
+//         builder: (context, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.waiting) {
+//             return CircularProgressIndicator(); // Loading indicator while data is being fetched.
+//           } else if (snapshot.hasError) {
+//             return Text('Error: ${snapshot.error}');
+//           } else {
+//             customer_order = snapshot.data ?? [];
+//             return SingleChildScrollView(
+//               scrollDirection: Axis.vertical,
+//               child: GridView.builder(
+//                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//                     crossAxisCount: 1,
+//                     childAspectRatio: 24.0),
+//                 itemCount: Orders.length,
+//                 itemBuilder: (context, index) {
+//                   return Padding(
+//                     padding: EdgeInsets.all(5.0),
+//                     child: OrderCartDesign(object: customer_order[index]),
+//                   );
+//                 },
+//                 shrinkWrap: true,
+//                 physics: NeverScrollableScrollPhysics(),
+//               ),
+//             );
+//           }
+//         },
+//       ),
+//     );
+//   }
+// }
+
+
+class customerOrderDetail{
+  final String customerId;
+  final String orderId;
+  customerOrderDetail({required this.customerId, required this.orderId});
+}
+
+Future<customerOrderDetail> getCustomerOrderDetail(String order_id) async {
+  List<customerOrderDetail> order_detail = [];
+  var response = await http.get(Uri.parse(getCustomerOrders));
+  var data = jsonDecode(response.body);
+  if (data['status']) {
+    List<dynamic> cartData = data['OrderData'];
+    cartData.forEach((value) {
+      if(value['_id'] == order_id)
+      {
+        order_detail.add(
+            customerOrderDetail(
+              customerId: value['customer_id'],
+              orderId: value['order_id']
+            )
+        );
+      }
+    });
+    messageToShow('Data Loaded Successfully!');
+  } else {
+    messageToShow('Server Error try again!');
+  }
+  return order_detail[0];
+}
+
+Future<List<order_Cart>> getOrderDetail(String order_id, String customer_id) async {
+  List<order_Cart> order_detail = [];
+  var response = await http.get(Uri.parse(getOrderItem));
+  var data = jsonDecode(response.body);
+  if (data['status']) {
+    List<dynamic> cartData = data['OrderData'];
+    cartData.forEach((value) {
+      if(value['_id'] == order_id && value['user_id'] == customer_id)
+      {
+        order_detail.add(
+            order_Cart(
+                image: value['item_image'],
+                price: value['item_price'],
+                quantity: value['item_quantity'],
+                order_item_name: value['item_name'],
+                userId: value['user_id']
+            )
+        );
+      }
+    });
+    messageToShow('Data Loaded Successfully!');
+  } else {
+    messageToShow('Server Error try again!');
+  }
+  return order_detail;
+}
+
