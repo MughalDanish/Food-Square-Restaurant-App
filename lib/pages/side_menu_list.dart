@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
 
-class SideMenuList extends StatelessWidget {
+import 'FoodPages/user_Orders.dart';
+import 'MyProfile/Profile.dart';
+import 'Restaurant Tables/userTableCart.dart';
+
+class SideMenuList extends StatefulWidget {
   const SideMenuList({super.key});
 
+  @override
+  State<SideMenuList> createState() => _SideMenuListState();
+}
+
+class _SideMenuListState extends State<SideMenuList> {
+  void  gotToProfile(){
+    setState(() {
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfileDetails()));
+    });
+  }
+  void gotToOrders(){
+    setState(() {
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> Previous_orders()));
+    });
+  }
+  void goToTablePage(){
+    setState(() {
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> GridOfTableCarts()));
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -38,15 +62,15 @@ class SideMenuList extends StatelessWidget {
            ),
 
            SizedBox(height: 20),
-           buttonDecoration(name: 'Profile', image:'assets/images/userProfile.png', onTap: () {}),
+           buttonDecoration(name: 'Profile', image:'assets/images/userProfile.png', onTap: gotToProfile),
            divideListMenu(),
-           buttonDecoration(name: 'Orders', image:'assets/images/order.png', onTap: () {}),
+           buttonDecoration(name: 'Orders', image:'assets/images/order.png', onTap: gotToOrders),
            divideListMenu(),
            buttonDecoration(name: 'Offer and promo', image:'assets/images/offers.png', onTap: () {}),
            divideListMenu(),
-           buttonDecoration(name: 'Book table', image:'assets/images/restaurant-table.png', onTap: () {}),
+           buttonDecoration(name: 'Book table', image:'assets/images/restaurant-table.png', onTap: (){}),
            divideListMenu(),
-           buttonDecoration(name: 'Help', image:'assets/images/help.png', onTap: () {}),
+           buttonDecoration(name: 'Help', image:'assets/images/help.png', onTap: goToTablePage),
            SizedBox(height: 100),
            Padding(
              padding: EdgeInsets.only(left:20),
@@ -71,13 +95,16 @@ class SideMenuList extends StatelessWidget {
          ],
     );
   }
+
   buttonDecoration({
     required String name,
     required String image,
     required VoidCallback onTap
   }){
     return ListTile(
-      onTap: (){},
+      onTap: (){
+        onTap;
+      },
       leading: Image(image: AssetImage(image),
       height: 25,
       width: 25,),
@@ -89,6 +116,7 @@ class SideMenuList extends StatelessWidget {
       ),)
     );
   }
+
   divideListMenu(){
     return Padding(
       padding: EdgeInsets.only(left:57, right:30),
